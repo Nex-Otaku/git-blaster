@@ -1,0 +1,18 @@
+{
+  "name": "@nex-otaku/git-blaster",
+  "version": "1.0.0",
+  "description": "Tool to manage Git tasks from nice terminal UI",
+  "main": "git-blaster.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "preferGlobal": true,
+  "bin": "./git-blaster.js",
+  "keywords": [
+    "git",
+    "console",
+    "tool"
+  ],
+  "author": "Nex Otaku",
+  "license": "MIT"
+}
