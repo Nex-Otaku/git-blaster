@@ -38,6 +38,14 @@ const selectAction = async (actions, promptMessage) => {
     return results.action;
 };
 
+const commit = async () => {
+    // TODO
+};
+
+const deployDev = async () => {
+    // TODO
+};
+
 module.exports = {
     // Задачи:
     // 1. Stage + Commit (Message) + Push

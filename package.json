@@ -14,5 +14,15 @@
     "tool"
   ],
   "author": "Nex Otaku",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "child-process-promise": "^2.2.1",
+    "clear": "^0.1.0",
+    "figlet": "^1.8.0",
+    "fs": "^0.0.1-security",
+    "inquirer": "^12.5.2",
+    "lodash": "^4.17.21",
+    "press-any-key": "^1.1.0"
+  }
 }
