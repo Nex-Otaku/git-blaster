@@ -61,7 +61,7 @@ const commit = async () => {
 
     if (!hasChanges) {
         console.log('Нет изменений, нечего коммитить');
-        await lib.sleep(2);
+        await lib.sleep(1);
 
         return;
     }
