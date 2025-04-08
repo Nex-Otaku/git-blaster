@@ -1,5 +1,6 @@
 const lib = require('./lib');
 const _ = require('lodash');
+const {sleep} = require("./lib");
 
 let chalk = null;
 let inquirer = null;
@@ -56,6 +57,15 @@ const inputCommitMessage = async () => {
 };
 
 const commit = async () => {
+    const hasChanges = await gitHasChanges();
+
+    if (!hasChanges) {
+        console.log('Нет изменений, нечего коммитить');
+        await lib.sleep(2);
+
+        return;
+    }
+
     const commitMessage = await inputCommitMessage();
     await gitAdd('.');
     await gitCommit(commitMessage);
@@ -78,6 +88,13 @@ const gitPush = async () => {
     const command = 'git push';
 
     await lib.shellRun(command);
+}
+
+const gitHasChanges = async () => {
+    const command = 'git status --porcelain';
+    const output = await lib.shellRun(command);
+
+    return output !== '';
 }
 
 const getBranches = async () => {
