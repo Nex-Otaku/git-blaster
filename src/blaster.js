@@ -59,6 +59,7 @@ const commit = async () => {
     const commitMessage = await inputCommitMessage();
     await gitAdd('.');
     await gitCommit(commitMessage);
+    await gitPush();
 };
 
 const gitStatus = async () => {
@@ -69,6 +70,12 @@ const gitStatus = async () => {
 
 const gitPull = async () => {
     const command = 'git pull';
+
+    await lib.shellRun(command);
+}
+
+const gitPush = async () => {
+    const command = 'git push';
 
     await lib.shellRun(command);
 }
