@@ -18,7 +18,7 @@ const printHeader = async () => {
     );
 
     lib.newline();
-    blaster.showStatus();
+    await blaster.showStatus();
     lib.newline();
 };
 
@@ -50,12 +50,17 @@ const mainLoop = async () => {
         let needToWait = false;
 
         const selectedAction = await selectAction([
+            'Обновить',
             'Коммит',
             'Выкатить на DEV сервер',
             'Переключить ветку',
             new inquirer.Separator(),
             'Выйти',
         ]);
+
+        if (selectedAction === 'Обновить') {
+            // Ничего не делаем
+        }
 
         if (selectedAction === 'Коммит') {
             await blaster.commit();

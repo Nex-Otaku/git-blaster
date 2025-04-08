@@ -16,11 +16,12 @@ const getCurrentDirectory = () => {
     return process.cwd();
 };
 
-const showStatus = () => {
-    // TODO
-    // Показать назакомиченные изменения если есть.
+const showStatus = async () => {
     console.log(getCurrentDirectory());
-    console.log('Статус: OK');
+    console.log('');
+
+    const gitStatusText = await gitStatus();
+    console.log(gitStatusText);
 }
 
 const selectAction = async (actions, promptMessage) => {
@@ -58,6 +59,12 @@ const commit = async () => {
     const commitMessage = await inputCommitMessage();
     await gitAdd('.');
     await gitCommit(commitMessage);
+};
+
+const gitStatus = async () => {
+    const command = 'git status';
+
+    return (await lib.shellRun(command));
 };
 
 const gitPull = async () => {
