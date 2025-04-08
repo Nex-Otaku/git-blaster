@@ -38,8 +38,26 @@ const selectAction = async (actions, promptMessage) => {
     return results.action;
 };
 
+const inputCommitMessage = async () => {
+    return (await inquirer.prompt({
+        name: 'commitMessage',
+        type: 'input',
+        message: 'Описание:',
+        default: '',
+        validate: function( value ) {
+            if (value.length) {
+                return true;
+            } else {
+                return 'Пожалуйста введите описание коммита';
+            }
+        }
+    })).commitMessage;
+};
+
 const commit = async () => {
-    // TODO
+    const commitMessage = await inputCommitMessage();
+    await gitAdd('.');
+    await gitCommit(commitMessage);
 };
 
 const gitPull = async () => {
@@ -54,6 +72,18 @@ const getBranches = async () => {
     const list = await lib.shellRun(command);
 
     return list.split("\n");
+}
+
+const gitAdd = async (path) => {
+    const command = 'git add ' + path;
+
+    await lib.shellRun(command);
+}
+
+const gitCommit = async (message) => {
+    const command = 'git commit -m "' + message + '"';
+
+    await lib.shellRun(command);
 }
 
 const gitCheckoutBranch = async (branch) => {
