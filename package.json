@@ -23,6 +23,7 @@
     "fs": "^0.0.1-security",
     "inquirer": "^12.5.2",
     "lodash": "^4.17.21",
-    "press-any-key": "^1.1.0"
+    "press-any-key": "^1.1.0",
+    "shell-quote": "^1.8.2"
   }
 }

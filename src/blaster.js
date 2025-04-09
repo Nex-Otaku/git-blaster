@@ -1,6 +1,7 @@
 const lib = require('./lib');
 const _ = require('lodash');
 const {sleep} = require("./lib");
+const shell = require('./shell');
 
 let chalk = null;
 let inquirer = null;
@@ -17,13 +18,19 @@ const getCurrentDirectory = () => {
     return process.cwd();
 };
 
-const showStatus = async () => {
+const showStatus = async (shellOutputData = null) => {
     console.log(getCurrentDirectory());
     console.log('');
 
     const gitStatusText = await gitStatus();
     console.log(gitStatusText);
 }
+
+const updateOnShellOutputCallback = async (data) => {
+    await showStatus(data);
+}
+
+shell.setup(updateOnShellOutputCallback, false);
 
 const selectAction = async (actions, promptMessage) => {
     let results = await inquirer.prompt([
