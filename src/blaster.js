@@ -22,6 +22,17 @@ const showStatus = async (shellOutputData = null) => {
     console.log(getCurrentDirectory());
     console.log('');
 
+    if (shellOutputData !== null) {
+        console.log('------------------------------');
+        console.log(shellOutputData.stdOutput);
+
+        if (shellOutputData.stderrOutput !== '') {
+            console.error(shellOutputData.stderrOutput);
+        }
+
+        console.log('------------------------------');
+    }
+
     const gitStatusText = await gitStatus();
     console.log(gitStatusText);
 }
@@ -82,24 +93,24 @@ const commit = async () => {
 const gitStatus = async () => {
     const command = 'git status';
 
-    return (await lib.shellRun(command));
+    return (await shell.run(command));
 };
 
 const gitPull = async () => {
     const command = 'git pull';
 
-    await lib.shellRun(command);
+    await shell.run(command);
 }
 
 const gitPush = async () => {
     const command = 'git push';
 
-    await lib.shellRun(command);
+    await shell.run(command);
 }
 
 const gitHasChanges = async () => {
     const command = 'git status --porcelain';
-    const output = await lib.shellRun(command);
+    const output = await shell.run(command);
 
     return output !== '';
 }
@@ -107,7 +118,7 @@ const gitHasChanges = async () => {
 const getBranches = async () => {
     const command = 'git branch --list --no-color';
 
-    const list = await lib.shellRun(command);
+    const list = await shell.run(command);
 
     return list.split("\n");
 }
@@ -115,19 +126,19 @@ const getBranches = async () => {
 const gitAdd = async (path) => {
     const command = 'git add ' + path;
 
-    await lib.shellRun(command);
+    await shell.run(command);
 }
 
 const gitCommit = async (message) => {
     const command = 'git commit -m "' + message + '"';
 
-    await lib.shellRun(command);
+    await shell.run(command);
 }
 
 const gitCheckoutBranch = async (branch) => {
     const command = 'git checkout ' + branch;
 
-    await lib.shellRun(command);
+    await shell.run(command);
 }
 
 const deployDev = async () => {

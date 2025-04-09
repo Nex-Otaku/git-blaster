@@ -48,10 +48,10 @@ const execCommand = async (command, args = []) => {
 
             stdOutput += text;
 
-            await outputCalback({
-                stderr: stderrOutput,
-                stdout: stdOutput
-            })
+            // await outputCalback({
+            //     stderrOutput: stderrOutput,
+            //     stdOutput: stdOutput
+            // })
         });
 
         // Вывод stderr в реальном времени и сохранение для проверки
@@ -64,18 +64,18 @@ const execCommand = async (command, args = []) => {
 
             stderrOutput += text;
 
-            await outputCalback({
-                stderr: stderrOutput,
-                stdout: stdOutput
-            })
+            // await outputCalback({
+            //     stderrOutput: stderrOutput,
+            //     stdOutput: stdOutput
+            // })
         });
 
         // Обработка завершения процесса
         process.on('close', (exitCode) => {
             resolve({
                 exitCode: exitCode || 0,
-                stderr: stderrOutput.trim(),
-                stdout: stdOutput
+                stderrOutput: stderrOutput.trim(),
+                stdOutput: stdOutput
             });
         });
 
@@ -85,7 +85,7 @@ const execCommand = async (command, args = []) => {
             resolve({
                 exitCode: 1,
                 stderr: error.message,
-                stdout: stdOutput
+                stdOutput: stdOutput
             });
         });
     });
