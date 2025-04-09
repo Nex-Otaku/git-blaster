@@ -160,6 +160,7 @@ const switchBranch = async () => {
     }
 
     await gitCheckoutBranch(branch);
+    await gitPull();
     console.log('Переключились в ветку "' + branch + '"');
 }
 
