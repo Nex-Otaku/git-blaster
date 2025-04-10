@@ -78,6 +78,7 @@ const mainLoop = async () => {
 
         if (selectedAction === 'Новая ветка') {
             await blaster.newBranch();
+            needToWait = true;
         }
 
         if (selectedAction === 'Выйти') {
