@@ -120,7 +120,7 @@ const getLocalBranches = async () => {
 
     const list = await shell.run(command);
 
-    return list.split("\n").replaceAll('*', '').trim();
+    return list.split("\n").map(line => line.replaceAll('*', '').trim());
 }
 
 const getRemoteBranches = async () => {
@@ -128,7 +128,7 @@ const getRemoteBranches = async () => {
 
     const list = await shell.run(command);
 
-    return list.split("\n").replaceAll('*', '').trim();
+    return list.split("\n").map(line => line.replaceAll('*', '').trim());
 }
 
 const gitAdd = async (path) => {
