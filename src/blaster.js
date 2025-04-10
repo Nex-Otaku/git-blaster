@@ -207,7 +207,6 @@ const inputNewBranchName = async () => {
 const newBranch = async () => {
     const newBranchName = await inputNewBranchName();
 
-    await gitPull();
     const localBranches = await getLocalBranches();
 
     if (localBranches.includes(newBranchName)) {
@@ -216,6 +215,7 @@ const newBranch = async () => {
         return;
     }
 
+    await gitPull();
     const remoteBranches = await getRemoteBranches();
     const remoteBranchExpected = 'origin/' + newBranchName;
 
