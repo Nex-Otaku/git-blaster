@@ -115,12 +115,20 @@ const gitHasChanges = async () => {
     return output !== '';
 }
 
-const getBranches = async () => {
+const getLocalBranches = async () => {
     const command = 'git branch --list --no-color';
 
     const list = await shell.run(command);
 
-    return list.split("\n");
+    return list.split("\n").replaceAll('*', '').trim();
+}
+
+const getRemoteBranches = async () => {
+    const command = 'git branch --list -r --no-color';
+
+    const list = await shell.run(command);
+
+    return list.split("\n").replaceAll('*', '').trim();
 }
 
 const gitAdd = async (path) => {
@@ -139,6 +147,11 @@ const gitCheckoutBranch = async (branch) => {
     const command = 'git checkout ' + branch;
 
     await shell.run(command);
+}
+
+const gitNewBranch = async (branch) => {
+    await shell.run('git checkout -b ' + branch);
+    await shell.run('git push -u origin ' + branch);
 }
 
 const deployDev = async () => {
@@ -168,7 +181,7 @@ const selectBranch = async (prompt, branches) => {
 
 const switchBranch = async () => {
     await gitPull();
-    const branches = await getBranches();
+    const branches = await getLocalBranches();
     const branch = await selectBranch('Выберите ветку для переключения', branches);
 
     if (branch === '') {
@@ -182,6 +195,40 @@ const switchBranch = async () => {
     console.log('Переключились в ветку "' + branch + '"');
 }
 
+const inputNewBranchName = async () => {
+    return (await inquirer.prompt({
+        name: 'branchName',
+        type: 'input',
+        message: 'Имя новой ветки:',
+        default: '',
+    })).branchName;
+};
+
+const newBranch = async () => {
+    const newBranchName = await inputNewBranchName();
+
+    await gitPull();
+    const localBranches = await getLocalBranches();
+
+    if (localBranches.includes(newBranchName)) {
+        console.log('Ветка с таким именем уже существует локально');
+
+        return;
+    }
+
+    const remoteBranches = await getRemoteBranches();
+    const remoteBranchExpected = 'origin/' + newBranchName;
+
+    if (remoteBranches.includes(remoteBranchExpected)) {
+        console.log('Ветка с таким именем уже существует удалённо в origin');
+
+        return;
+    }
+
+    await gitNewBranch(newBranchName);
+    console.log('Создана ветка "' + newBranchName + '"');
+}
+
 module.exports = {
     // Задачи:
     // 1. Stage + Commit (Message) + Push
@@ -190,7 +237,8 @@ module.exports = {
     deployDev: deployDev,
     // 3. Swith branch + Pull
     switchBranch: switchBranch,
-    // 5. View changed files: git status!!! В строке статуса
+    // 4. Новая ветка
+    newBranch: newBranch,
 
     // UI
     setInquirer: setInquirer,

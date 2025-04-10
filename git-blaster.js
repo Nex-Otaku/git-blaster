@@ -54,6 +54,7 @@ const mainLoop = async () => {
             'Коммит',
             'Выкатить на DEV сервер',
             'Переключить ветку',
+            'Новая ветка',
             new inquirer.Separator(),
             'Выйти',
         ]);
@@ -73,6 +74,10 @@ const mainLoop = async () => {
 
         if (selectedAction === 'Переключить ветку') {
             await blaster.switchBranch();
+        }
+
+        if (selectedAction === 'Новая ветка') {
+            await blaster.newBranch();
         }
 
         if (selectedAction === 'Выйти') {
