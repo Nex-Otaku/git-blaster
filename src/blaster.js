@@ -138,7 +138,8 @@ const gitAdd = async (path) => {
 }
 
 const gitCommit = async (message) => {
-    const command = 'git commit -m "' + message + '"';
+    const escapedMessage = message.replaceAll('"', '\\"');
+    const command = 'git commit -m "' + escapedMessage + '"';
 
     await shell.run(command);
 }
