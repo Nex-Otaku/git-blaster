@@ -123,6 +123,13 @@ const getLocalBranches = async () => {
     return list.split("\n").map(line => line.replaceAll('*', '').trim());
 }
 
+const getLocalBranchesWithoutCurrent = async () => {
+    const branches = await getLocalBranches();
+    const currentBranch = await getCurrentBranch();
+
+    return branches.filter(item => item !== currentBranch);
+}
+
 const getRemoteBranches = async () => {
     const command = 'git branch --list -r --no-color';
 
@@ -155,6 +162,10 @@ const gitNewBranch = async (branch) => {
     await shell.run('git push -u origin ' + branch);
 }
 
+const gitMergeBranch = async (branch) => {
+    await shell.run('git merge ' + branch);
+}
+
 const deployDev = async () => {
     // TODO
 };
@@ -180,9 +191,16 @@ const selectBranch = async (prompt, branches) => {
     return result.branch;
 };
 
+const getCurrentBranch = async () => {
+    const command = 'git branch --show-current';
+
+    const output = await shell.run(command);
+
+    return output.trim();
+}
+
 const switchBranch = async () => {
-    await gitPull();
-    const branches = await getLocalBranches();
+    const branches = await getLocalBranchesWithoutCurrent();
     const branch = await selectBranch('Выберите ветку для переключения', branches);
 
     if (branch === '') {
@@ -191,6 +209,7 @@ const switchBranch = async () => {
         return;
     }
 
+    await gitPull();
     await gitCheckoutBranch(branch);
     await gitPull();
     console.log('Переключились в ветку "' + branch + '"');
@@ -204,6 +223,26 @@ const inputNewBranchName = async () => {
         default: '',
     })).branchName;
 };
+
+const mergeBranch = async () => {
+    const branches = await getLocalBranchesWithoutCurrent();
+    const mergedBranch = await selectBranch('Выберите ветку для переключения', branches);
+
+    if (mergedBranch === '') {
+        console.log('Не переключаемся');
+
+        return;
+    }
+
+    const currentBranch = await getCurrentBranch();
+    await gitPull();
+    await gitCheckoutBranch(mergedBranch);
+    await gitPull();
+    await gitCheckoutBranch(currentBranch);
+    await gitMergeBranch(mergedBranch);
+    await gitPush();
+    console.log('В ветку "' + currentBranch + '" влиты изменения из ветки "' + mergedBranch + '"');
+}
 
 const newBranch = async () => {
     const newBranchName = await inputNewBranchName();
@@ -239,6 +278,8 @@ module.exports = {
     // 3. Swith branch + Pull
     switchBranch: switchBranch,
     // 4. Новая ветка
+    mergeBranch: mergeBranch,
+    // 5. Новая ветка
     newBranch: newBranch,
 
     // UI

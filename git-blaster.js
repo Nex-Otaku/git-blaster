@@ -52,9 +52,11 @@ const mainLoop = async () => {
         const selectedAction = await selectAction([
             'Обновить',
             'Коммит',
-            'Выкатить на DEV сервер',
             'Переключить ветку',
+            'Слияние веток',
             'Новая ветка',
+            new inquirer.Separator(),
+            'Выкатить на DEV сервер',
             new inquirer.Separator(),
             'Выйти',
         ]);
@@ -67,17 +69,22 @@ const mainLoop = async () => {
             await blaster.commit();
         }
 
-        if (selectedAction === 'Выкатить на DEV сервер') {
-            await blaster.deployDev();
-            needToWait = true;
-        }
-
         if (selectedAction === 'Переключить ветку') {
             await blaster.switchBranch();
         }
 
+        if (selectedAction === 'Слияние веток') {
+            await blaster.mergeBranch();
+            needToWait = true;
+        }
+
         if (selectedAction === 'Новая ветка') {
             await blaster.newBranch();
+            needToWait = true;
+        }
+
+        if (selectedAction === 'Выкатить на DEV сервер') {
+            await blaster.deployDev();
             needToWait = true;
         }
 
