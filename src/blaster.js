@@ -226,10 +226,10 @@ const inputNewBranchName = async () => {
 
 const mergeBranch = async () => {
     const branches = await getLocalBranchesWithoutCurrent();
-    const mergedBranch = await selectBranch('Выберите ветку для переключения', branches);
+    const mergedBranch = await selectBranch('Выберите ветку для слияния', branches);
 
     if (mergedBranch === '') {
-        console.log('Не переключаемся');
+        console.log('Не выполняем слияние');
 
         return;
     }
